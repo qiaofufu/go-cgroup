@@ -13,6 +13,7 @@ func (c *ControlGroup) AddPid(pid int) error {
 			return err
 		}
 	}
+	return nil
 }
 
 func (c *ControlGroup) Delete() error {
@@ -22,6 +23,7 @@ func (c *ControlGroup) Delete() error {
 			return err
 		}
 	}
+	return nil
 }
 
 func New(resource []rescource.IResource) (*ControlGroup, error) {
@@ -35,5 +37,3 @@ func New(resource []rescource.IResource) (*ControlGroup, error) {
 	}
 	return cg, nil
 }
-
-
