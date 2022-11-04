@@ -3,7 +3,6 @@ package rescource
 import (
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"path"
 	"reflect"
@@ -18,7 +17,6 @@ type IResource interface {
 func writeToCGroupFile(t reflect.Type, v reflect.Value, dirPath string, flag int) error {
 	for i := 0; i < t.NumField(); i++ {
 		filename := t.Field(i).Tag.Get("filename")
-		log.Println(filename)
 		var val []byte
 		switch v.Field(i).Kind() {
 		case reflect.String:
@@ -40,7 +38,6 @@ func writeToCGroupFile(t reflect.Type, v reflect.Value, dirPath string, flag int
 }
 
 func writeToFile(name string, data []byte, flag int, perm os.FileMode) error {
-	log.Println(name, string(data))
 	file, err := os.OpenFile(name, flag, perm)
 	if err != nil {
 		return errors.New(fmt.Sprintf("open file error :%v", err))
