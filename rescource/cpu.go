@@ -41,3 +41,11 @@ func (c *CPU) AddPid(pid int) error {
 	}
 	return nil
 }
+
+func (c *CPU) Delete() error {
+	dirPath := path.Join(BaseDirCPU, c.Strategy)
+	if err := os.RemoveAll(dirPath); err != nil {
+		return err
+	}
+	return nil
+}

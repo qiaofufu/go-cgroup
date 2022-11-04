@@ -40,3 +40,11 @@ func (m *Memory) AddPid(pid int) error {
 	}
 	return nil
 }
+
+func (m *Memory) Delete() error {
+	dirPath := path.Join(baseDirMemory, m.Strategy)
+	if err := os.RemoveAll(dirPath); err != nil {
+		return err
+	}
+	return nil
+}

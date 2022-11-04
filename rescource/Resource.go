@@ -11,6 +11,7 @@ import (
 type IResource interface {
 	Create() error
 	AddPid(pid int) error
+	Delete() error
 }
 
 func writeToCGroupFile(t reflect.Type, v reflect.Value, dirPath string, flag int) error {
