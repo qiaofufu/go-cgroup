@@ -13,8 +13,8 @@ const (
 
 type CPU struct {
 	Strategy string
-	Quota    uint `name:"cpu.cfs_quota_us"`
-	Period   uint `name:"cpu.cfs_period_us"`
+	Quota    uint `filename:"cpu.cfs_quota_us"`
+	Period   uint `filename:"cpu.cfs_period_us"`
 }
 
 // Create dir
