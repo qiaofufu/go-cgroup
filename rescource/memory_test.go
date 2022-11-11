@@ -14,7 +14,7 @@ func TestMemory_Create(t *testing.T) {
 		Swappiness:    0,
 	}
 
-	if err := mem.Create(); err != nil {
+	if err := mem.Create(""); err != nil {
 		t.Fatal(fmt.Sprintf("%v create memory cgroup fail.", err))
 	}
 }
@@ -26,7 +26,7 @@ func TestMemory_AddPid(t *testing.T) {
 		Swappiness:    0,
 	}
 
-	if err := mem.Create(); err != nil {
+	if err := mem.Create(""); err != nil {
 		t.Fatal(fmt.Sprintf("%v create memory cgroup fail.", err))
 	}
 

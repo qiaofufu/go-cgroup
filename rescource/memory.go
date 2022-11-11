@@ -13,19 +13,19 @@ const (
 )
 
 type Memory struct {
-	Strategy      string
+	dirPath       string
 	LimitInMemory uint `filename:"memory.limit_in_bytes"`
 	Swappiness    uint `filename:"memory.swappiness"`
 }
 
-func (m *Memory) Create() error {
-	dirPath := path.Join(baseDirMemory, m.Strategy)
-	if err := os.Mkdir(dirPath, 0750); err != nil && !os.IsExist(err) {
+func (m *Memory) Create(name string) error {
+	m.dirPath = path.Join(baseDirMemory, name)
+	if err := os.Mkdir(m.dirPath, 0750); err != nil && !os.IsExist(err) {
 		return err
 	}
 	t := reflect.TypeOf(*m)
 	v := reflect.ValueOf(*m)
-	err := writeToCGroupFile(t, v, dirPath, os.O_TRUNC|os.O_WRONLY)
+	err := writeToCGroupFile(t, v, m.dirPath, os.O_TRUNC|os.O_WRONLY)
 	if err != nil {
 		return err
 	}
@@ -33,8 +33,7 @@ func (m *Memory) Create() error {
 }
 
 func (m *Memory) AddPid(pid int) error {
-	dirPath := path.Join(baseDirMemory, m.Strategy)
-	err := addPid(dirPath, pid)
+	err := addPid(m.dirPath, pid)
 	if err != nil {
 		return err
 	}
@@ -42,8 +41,7 @@ func (m *Memory) AddPid(pid int) error {
 }
 
 func (m *Memory) Delete() error {
-	dirPath := path.Join(baseDirMemory, m.Strategy)
-	if err := os.RemoveAll(dirPath); err != nil {
+	if err := os.RemoveAll(m.dirPath); err != nil {
 		return err
 	}
 	return nil

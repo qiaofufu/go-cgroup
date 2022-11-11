@@ -2,8 +2,15 @@ package cgroup
 
 import "github.com/qiaofufu/go-cgroup/rescource"
 
+func New(path string) (*ControlGroup, error) {
+	cg := &ControlGroup{Name: path}
+
+	return cg, nil
+}
+
 type ControlGroup struct {
-	r []rescource.IResource
+	Name string
+	r    []rescource.IResource
 }
 
 func (c *ControlGroup) AddPid(pid int) error {
@@ -26,14 +33,13 @@ func (c *ControlGroup) Delete() error {
 	return nil
 }
 
-func New(resource []rescource.IResource) (*ControlGroup, error) {
-	cg := &ControlGroup{r: resource}
-	for _, v := range cg.r {
-		err := v.Create()
+func (c *ControlGroup) AddResource(resources ...rescource.IResource) error {
+	c.r = resources
+	for _, v := range c.r {
+		err := v.Create("")
 		if err != nil {
-			return nil, err
+			return err
 		}
-
 	}
-	return cg, nil
+	return nil
 }

@@ -9,7 +9,7 @@ import (
 )
 
 type IResource interface {
-	Create() error
+	Create(name string) error
 	AddPid(pid int) error
 	Delete() error
 }
@@ -54,7 +54,6 @@ func writeToFile(name string, data []byte, flag int, perm os.FileMode) error {
 
 func addPid(dirPath string, pid int) error {
 	filePath := path.Join(dirPath, "cgroup.procs")
-
 	err := writeToFile(filePath, []byte(fmt.Sprintf("%d", pid)), os.O_APPEND|os.O_WRONLY, 0750)
 	if err != nil {
 		return err

@@ -12,21 +12,21 @@ const (
 )
 
 type CPU struct {
-	Strategy string
-	Quota    uint `filename:"cpu.cfs_quota_us"`
-	Period   uint `filename:"cpu.cfs_period_us"`
+	dirPath string
+	Quota   uint `filename:"cpu.cfs_quota_us"`
+	Period  uint `filename:"cpu.cfs_period_us"`
 }
 
 // Create dir
-func (c *CPU) Create() error {
+func (c *CPU) Create(name string) error {
 	// make dir
-	dirPath := path.Join(BaseDirCPU, c.Strategy)
-	if err := os.Mkdir(dirPath, 0750); err != nil && !os.IsExist(err) {
+	c.dirPath = path.Join(BaseDirCPU, name)
+	if err := os.Mkdir(c.dirPath, 0750); err != nil && !os.IsExist(err) {
 		return err
 	}
 	t := reflect.TypeOf(*c)
 	v := reflect.ValueOf(*c)
-	err := writeToCGroupFile(t, v, dirPath, os.O_TRUNC|os.O_WRONLY)
+	err := writeToCGroupFile(t, v, c.dirPath, os.O_TRUNC|os.O_WRONLY)
 	if err != nil {
 		return err
 	}
@@ -34,8 +34,7 @@ func (c *CPU) Create() error {
 }
 
 func (c *CPU) AddPid(pid int) error {
-	dirPath := path.Join(BaseDirCPU, c.Strategy)
-	err := addPid(dirPath, pid)
+	err := addPid(c.dirPath, pid)
 	if err != nil {
 		return err
 	}
@@ -43,8 +42,7 @@ func (c *CPU) AddPid(pid int) error {
 }
 
 func (c *CPU) Delete() error {
-	dirPath := path.Join(BaseDirCPU, c.Strategy)
-	if err := os.RemoveAll(dirPath); err != nil {
+	if err := os.RemoveAll(c.dirPath); err != nil {
 		return err
 	}
 	return nil
